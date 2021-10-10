@@ -1,5 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import os
+
+
+foldername = ""
 
 
 def bookname2bookpage(abname):
@@ -36,32 +40,71 @@ def bookpage2playerpage(bookpage):
 
 
 def playerpage2fileurl(playerpage):
+    global foldername
     if playerpage == 0:
         return []
     weirdbs = requests.get(playerpage)
-    (weirdbs.text)
     soup = BeautifulSoup(weirdbs.content, "html.parser")
+    Name = soup.find_all("h2", {"class": "audioalbum"})
+    foldername = Name[0].contents[0][:-10]
+    print(f"The book being downloaded is {foldername}")
     links = []
     for link in soup.find_all("a", href=True):
         if link["href"].split(".")[-1] == "mp3":
             print(link["href"])
             links.append(link["href"])
+
     return links
 
 
 def downloadfromfile(links):
+    global foldername
     if len(links) > 0:
+        try:
+            print("Checking if book is already downloaded or not.")
+            if not os.path.exists(foldername):
+                print("Book is not downloaded.")
+                print("starting to download")
+                os.mkdir(foldername)
+                for link in links:
+                    filenum = 1
+                    r = requests.get(link, stream=True)
+                    name = link.split("/")[-1]
+
+                    with open(f"{foldername}/{filenum}_{name}", "wb") as mp3:
+                        for chunk in r.iter_content(chunk_size=256 * 1024):
+                            # writing one chunk at a time to audio file
+                            if chunk:
+                                mp3.write(chunk)
+                    filenum = filenum + 1
+                print("Successful download")
+                with open(f"{foldername}/success.txt", "w") as succ:
+                    succ.write("Successful Download! plox;_;")
+            else:
+                if os.path.exists(f"{foldername}/success.txt"):
+                    print(
+                        f"A successful download already exists. If you wish to redownload remove {foldername}/success.txt"
+                    )
+                else:
+                    for link in links:
+                        filenum = 1
+                        r = requests.get(link, stream=True)
+                        name = link.split("/")[-1]
+
+                        with open(f"{foldername}/{filenum}_{name}", "wb") as mp3:
+                            for chunk in r.iter_content(chunk_size=256 * 1024):
+                                # writing one chunk at a time to audio file
+                                if chunk:
+                                    mp3.write(chunk)
+                        filenum = filenum + 1
+                    print("Successful download")
+                    with open(f"{foldername}/success.txt", "w") as succ:
+                        succ.write("Successful Download! plox;_;")
+
+        except Exception as e:
+            print(e)
         filenum = 1
-        for link in links:
-            r = requests.get(link, stream=True)
-            name = link.split("/")[-1]
-            with open(f"{filenum}_{name}", "wb") as mp3:
-                for chunk in r.iter_content(chunk_size=8 * 1024):
-                    # writing one chunk at a time to audio file
-                    if chunk:
-                        mp3.write(chunk)
-            filenum = filenum + 1
-        print("Successful download")
+
     else:
         print("Book not found")
 
