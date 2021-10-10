@@ -103,10 +103,21 @@ def downloadfromfile(links):
 
         except Exception as e:
             print(e)
+            return e
 
     else:
         print("Book not found")
+        return None
+    return 1
 
 
-inputtext = input("Enter something : ")
-downloadfromfile(playerpage2fileurl(bookpage2playerpage(bookname2bookpage(inputtext))))
+def download(inputtext):
+    output = downloadfromfile(
+        playerpage2fileurl(bookpage2playerpage(bookname2bookpage(inputtext)))
+    )
+    return output
+
+
+if __name__ == "__main__":
+    inputtext = input("Enter book's name: ")
+    download(inputtext)
