@@ -22,7 +22,7 @@ def add_book():
     books = glob.glob(f"{book}/*.mp3")
     for book in books:
         if book != ():
-            chaptername = book.split("/")[-2] + "/" + book.split("/")[-1][:-4]
+            chaptername = book.split("\\")[-2] + "\\" + book.split("\\")[-1][:-4]
             audiobook_chapter_box.insert(END, chaptername)
 
 
@@ -48,13 +48,14 @@ def play():
 
     else:
         if playerinitiated:
-            if (player.filename.split("/")[-1]) == (
-                audiobook_chapter_box.get(ACTIVE).split("/")[-1] + ".mp3"
+            if (player.filename.split("\\")[-1]) == (
+                audiobook_chapter_box.get(ACTIVE).split("\\")[-1] + ".mp3"
             ):
                 currentplaying = audiobook_chapter_box.curselection()[0]
                 return
             else:
                 chapter = audiobook_chapter_box.get(ACTIVE)
+                print(chapter)
                 player = AudioPlayer(chapter + ".mp3")
                 playerinitiated = True
                 player.play()
@@ -62,6 +63,7 @@ def play():
 
         else:
             chapter = audiobook_chapter_box.get(currentplaying)
+            print(chapter)
             player = AudioPlayer(chapter + ".mp3")
             playerinitiated = True
             player.play()
