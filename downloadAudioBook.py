@@ -66,8 +66,8 @@ def downloadfromfile(links):
                 print("Book is not downloaded.")
                 print("starting to download")
                 os.mkdir(foldername)
+                filenum = 1
                 for link in links:
-                    filenum = 1
                     r = requests.get(link, stream=True)
                     name = link.split("/")[-1]
 
@@ -86,8 +86,8 @@ def downloadfromfile(links):
                         f"A successful download already exists. If you wish to redownload remove {foldername}/success.txt"
                     )
                 else:
+                    filenum = 1
                     for link in links:
-                        filenum = 1
                         r = requests.get(link, stream=True)
                         name = link.split("/")[-1]
 
@@ -103,7 +103,6 @@ def downloadfromfile(links):
 
         except Exception as e:
             print(e)
-        filenum = 1
 
     else:
         print("Book not found")
