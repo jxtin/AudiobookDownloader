@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import filedialog, simpledialog, messagebox
-import pygame
 from audioplayer import AudioPlayer
 import glob
 from downloadAudioBook import *
@@ -11,7 +10,6 @@ root.title("Gui for Audiobook player")
 
 root.geometry("500x300")
 
-pygame.mixer.init()
 
 paused = False
 playerinitiated = False
