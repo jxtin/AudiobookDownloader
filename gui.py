@@ -119,8 +119,10 @@ def pause():
 def stop():
     global paused
     global player
+    global currentplaying
     audiobook_chapter_box.delete(0, END)
     player.stop()
+    currentplaying = 0
 
 
 audiobook_chapter_box = Listbox(
