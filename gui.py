@@ -20,10 +20,16 @@ else:
 paused = False
 playerinitiated = False
 currentplaying = 0
+bookadded = False
 
 
 def add_book():
     book = filedialog.askdirectory(initialdir="", title="Choose a book")
+    global bookadded
+    global currentplaying
+    global player
+    audiobook_chapter_box.delete(0, END)
+    currentplaying = 0
 
     books = glob.glob(f"{book}/*.mp3")
     for book in books:
@@ -32,13 +38,14 @@ def add_book():
                 book.split(seperator)[-2] + seperator + book.split(seperator)[-1][:-4]
             )
             audiobook_chapter_box.insert(END, chaptername)
+    bookadded = True
 
 
 def download_book():
     answer = simpledialog.askstring(
         "Input", "What book do you want to download?", parent=root
     )
-    print(download(answer))
+
     if download(answer) is None:
         messagebox.showerror("Error", "Book not found ;_;")
     else:
