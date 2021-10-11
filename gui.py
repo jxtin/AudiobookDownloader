@@ -11,34 +11,50 @@ root.title("Gui for Audiobook player")
 
 root.geometry("500x300")
 
+isWindows = True
+
 if os.name == "nt":
     seperator = "\\"
 else:
     seperator = "/"
+    isWindows = False
 
 
 paused = False
 playerinitiated = False
 currentplaying = 0
-bookadded = False
 
 
 def add_book():
     book = filedialog.askdirectory(initialdir="", title="Choose a book")
-    global bookadded
     global currentplaying
     global player
+    global playerinitiated
+    global paused
+    global isWindows
     audiobook_chapter_box.delete(0, END)
     currentplaying = 0
-
+    if playerinitiated:
+        player.stop()
+        paused = False
+        playerinitiated = False
     books = glob.glob(f"{book}/*.mp3")
-    for book in books:
-        if book != ():
-            chaptername = (
-                book.split(seperator)[-2] + seperator + book.split(seperator)[-1][:-4]
-            )
-            audiobook_chapter_box.insert(END, chaptername)
-    bookadded = True
+    if isWindows:
+        for book in books:
+            if book != ():
+                print(book)
+                chaptername = book.split("/")[-1][:-4]
+                audiobook_chapter_box.insert(END, chaptername)
+    else:
+        for book in books:
+            if book != ():
+                print(book)
+                chaptername = (
+                    book.split(seperator)[-2]
+                    + seperator
+                    + book.split(seperator)[-1][:-4]
+                )
+                audiobook_chapter_box.insert(END, chaptername)
 
 
 def download_book():
@@ -133,7 +149,7 @@ def stop():
 
 
 audiobook_chapter_box = Listbox(
-    root, bg="black", fg="white", width=60, selectbackground="blue"
+    root, bg="black", fg="white", width=70, selectbackground="blue"
 )
 audiobook_chapter_box.pack(pady=20)
 
