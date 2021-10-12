@@ -96,6 +96,7 @@ def play():
 
         else:
             chapter = audiobook_chapter_box.get(currentplaying)
+            audiobook_chapter_box.selection_set(currentplaying)
             print(chapter)
             player = AudioPlayer(chapter + ".mp3")
             playerinitiated = True
@@ -113,6 +114,7 @@ def forward():
     print(currentplaying - audiobook_chapter_box.size())
     if currentplaying == audiobook_chapter_box.size():
         currentplaying = currentplaying - 1
+        audiobook_chapter_box.selection_set(currentplaying)
         return
     player = AudioPlayer(chapter + ".mp3")
     playerinitiated = True
@@ -129,6 +131,7 @@ def backward():
     print(chapter)
     if currentplaying < 0:
         currentplaying = currentplaying + 1
+        audiobook_chapter_box.selection_set(currentplaying)
         return
     player = AudioPlayer(chapter + ".mp3")
     playerinitiated = True
