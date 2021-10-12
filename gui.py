@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import filedialog, simpledialog, messagebox
 import os
+import platform
 from audioplayer import AudioPlayer
 import glob
+from PIL import Image, ImageTk
 from downloadAudioBook import *
 
 
@@ -154,11 +156,20 @@ audiobook_chapter_box = Listbox(
 audiobook_chapter_box.pack(pady=20)
 
 
-back_btn_img = PhotoImage(file="img/Left.png")
-forward_btn_img = PhotoImage(file="img/Forward.png")
-play_btn_img = PhotoImage(file="img/Play.png")
-pause_btn_img = PhotoImage(file="img/Pause.png")
-stop_btn_img = PhotoImage(file="img/Stop.png")
+if platform.system() == "Darwin":
+    back_btn_img = ImageTk.PhotoImage(Image.open("img/Left.png"))
+    forward_btn_img = ImageTk.PhotoImage(Image.open("img/Forward.png"))
+    play_btn_img = ImageTk.PhotoImage(Image.open("img/Play.png"))
+    pause_btn_img = ImageTk.PhotoImage(Image.open("img/Pause.png"))
+    stop_btn_img = ImageTk.PhotoImage(Image.open("img/Stop.png"))
+
+
+else:
+    back_btn_img = PhotoImage(file="img/Left.png")
+    forward_btn_img = PhotoImage(file="img/Forward.png")
+    play_btn_img = PhotoImage(file="img/Play.png")
+    pause_btn_img = PhotoImage(file="img/Pause.png")
+    stop_btn_img = PhotoImage(file="img/Stop.png")
 
 
 controls_frame = Frame(root)
